@@ -1,9 +1,10 @@
 from preprocess import START, END, bigram_c, term_c, next_words, avg_sent_len, avg_sent_num
 from random import random
-
+import os
 import numpy as np
-
 from telebot import TeleBot
+
+
 # from telebot import apihelper
 
 
@@ -50,13 +51,18 @@ def query():
     return t
 
 
-token = open('tgtoken', 'r').readline().strip()
+if 'tgtoken' in os.listdir():
+    token = open('tgtoken', 'r').readline().strip()
+else:
+    token = os.environ['tgtoken']
 bot = TeleBot(token)
 
 PROXY = 'orbtl.s5.opennetwork.cc'
 PORT = 999
 USERNAME = 46321253
 PASSWORD = 'ThMSBJiT'
+
+
 # apihelper.proxy = {'https': f'socks5://{USERNAME}:{PASSWORD}@{PROXY}:{PORT}'}
 
 
