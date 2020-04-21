@@ -3,7 +3,8 @@ from random import random
 
 import numpy as np
 
-from telebot import TeleBot, apihelper
+from telebot import TeleBot
+# from telebot import apihelper
 
 
 def conditional_prob(t1, t2):
@@ -56,7 +57,7 @@ PROXY = 'orbtl.s5.opennetwork.cc'
 PORT = 999
 USERNAME = 46321253
 PASSWORD = 'ThMSBJiT'
-apihelper.proxy = {'https': f'socks5://{USERNAME}:{PASSWORD}@{PROXY}:{PORT}'}
+# apihelper.proxy = {'https': f'socks5://{USERNAME}:{PASSWORD}@{PROXY}:{PORT}'}
 
 
 @bot.message_handler(commands=['start'])
