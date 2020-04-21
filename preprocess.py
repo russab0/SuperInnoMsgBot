@@ -11,7 +11,7 @@ import re
 
 START = 'START'
 END = 'END'
-PUNCT = string.punctuation + '“”'
+PUNCT = string.punctuation + '“”«»—•'
 
 seed(1)
 np.random.seed(1)
@@ -55,33 +55,29 @@ def bigram_nextword(sentences):
     return bigrams, next_words
 
 
-messages = get_messages()
-print('MSG')
-sent_sizes = [len(word_tokenize(sent)) for msg in messages for sent in sent_tokenize(msg)]
-avg_sent_len = sum(sent_sizes) / len(sent_sizes)
-avg_sent_num = sum([len(sent_tokenize(msg)) for msg in messages]) / len(messages)
+def preprocess(path):
+    messages = get_messages(path)
+    print('MSG')
+    sent_sizes = [len(word_tokenize(sent)) for msg in messages for sent in sent_tokenize(msg)]
+    avg_sent_len = sum(sent_sizes) / len(sent_sizes)
+    avg_sent_num = sum([len(sent_tokenize(msg)) for msg in messages]) / len(messages)
 
-sentences = messages_to_sentences(messages)
-print('SENT')
-term_c = CountDict(Counter(list(chain(*sentences))))  # dict()
-term_c[START] = term_c[END] = len(sentences)
-N = sum(term_c.values())
+    sentences = messages_to_sentences(messages)
+    print('SENT')
+    term_c = CountDict(Counter(list(chain(*sentences))))  # dict()
+    term_c[START] = term_c[END] = len(sentences)
+    bigram_c, next_words = bigram_nextword(sentences)
 
-bigram_c, next_words = bigram_nextword(sentences)
-bi_N = sum(bigram_c.values())
+    bigram_pop = sorted(list(bigram_c.items()),
+                        key=lambda x: x[1],
+                        reverse=True
+                        )[:10]
+    bigram_start_pop = sorted(
+        [x for x in bigram_c.items() if x[0].startswith(START)],
+        key=lambda x: x[1],
+        reverse=True
+    )[:10]
+    print('bigram pop', bigram_pop)
+    print('bigram start pop', bigram_start_pop)
 
-bigram_pop = sorted(list(bigram_c.items()),
-                    key=lambda x: x[1],
-                    reverse=True
-                    )[:10]
-
-print('bigram pop', bigram_pop)
-
-bigram_start_pop = sorted(
-    [x for x in bigram_c.items() if x[0].startswith(START)],
-    key=lambda x: x[1],
-    reverse=True
-)[:10]
-print('bigram pop', bigram_pop)
-
-print('bigram start pop', bigram_start_pop)
+    return bigram_c, term_c, next_words, avg_sent_len, avg_sent_num
