@@ -58,6 +58,7 @@ def bigram_nextword(sentences):
 def preprocess(path):
     messages = get_messages(path)
     print('MSG')
+
     sent_sizes = [len(word_tokenize(sent)) for msg in messages for sent in sent_tokenize(msg)]
     avg_sent_len = sum(sent_sizes) / len(sent_sizes)
     avg_sent_num = sum([len(sent_tokenize(msg)) for msg in messages]) / len(messages)
